@@ -1,5 +1,18 @@
 void Gera_Octetos(){
-  if(file){
+  char text[32] = "150:146:129:22:0:2:0:110:";
+  int i = 0;
+  
+  char * octeto = strtok(text, ":");
+  while(octeto != NULL){
+    octetos[i] = (byte)String(octeto).toInt();
+    Serial.println(octeto);
+    octeto = strtok(NULL, ":");
+    i++;
+  }
+}
+
+void Gera_Linha(){
+   if(file){
     int i = 0;
     char item;
      while (file.available()) {
@@ -14,10 +27,6 @@ void Gera_Octetos(){
       }
      }
   }
-}
-
-void Gera_Linha(){
-  
 }
 
  void cleanLine(){

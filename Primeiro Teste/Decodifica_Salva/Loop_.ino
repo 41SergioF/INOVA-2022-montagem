@@ -20,9 +20,7 @@ void loop() {
       data_+=(String)octetos[i];
     }
     */
-    Serial.println("GEra!");
     Gera_Octetos();
-    Serial.println();
     
     // Inverte o byte de verificação.
     oux_byte=~oux_byte;
