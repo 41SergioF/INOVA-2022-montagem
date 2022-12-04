@@ -55,14 +55,17 @@ void loop() {
     //Serial.print(" : ");
     //Serial.print(oux_byte,HEX);
     //Serial.println();
-
+    for (int i = 0; i < 8; i++){
+      Serial.print(octetos[i]);     
+    }
+    Serial.println();
     
     // Verificação de Bytes: (true) Bytes recebidos com sucesso, (false) descartar Bytes.
     // octetos[7] => último byte recebido.
     // oux_byte => ou exclusivo de todos os bytes recebidos até agora. Tem-se que inverter bit-a-bit o valor de oux_byte antes da verificação.
     verificacao_ok=((octetos[7]==oux_byte)?true:false);
       
-    if(verificacao_ok){
+    //if(verificacao_ok){
         // Decodifica dados recebisos pela SSU.
         Decodifica();
         // Atualiza o valor da conta.
@@ -72,7 +75,7 @@ void loop() {
       
         //DEBUG: Envia dados pela Serial para o computador.
         Envia_dados_serial();         
-      }
+      //}
 
       //Zera contagem de octetos para nova recepção.  
       indice_octeto=0;

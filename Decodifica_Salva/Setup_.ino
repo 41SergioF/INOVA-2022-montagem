@@ -6,15 +6,19 @@ void setup() {
   delay(50); 
 
   digitalWrite(16, HIGH);
+  /*
   display.init();
   display.flipScreenVertically();
   display.setFont(ArialMT_Plain_10);
   display.setTextAlignment(TEXT_ALIGN_LEFT);
 
+*/
   // Configuração Serial.
   Serial.begin(115200);
   while (!Serial); //if just the the basic function, must connect to a computer
   delay(1000);
+
+  Serial.println("Init Serial");
 /*
   Serial.println("LoRa Receiver"); 
   display.drawString(5,5,"LoRa Receiver"); 
