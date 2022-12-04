@@ -29,9 +29,7 @@ void loop() {
     //Serial.print(octetos[7],HEX);
     //Serial.print(" : ");
     //Serial.print(oux_byte,HEX);
-    //Serial.println();
-   
-    Serial.println(line);     
+    //Serial.println();   
     
     
     // Verificação de Bytes: (true) Bytes recebidos com sucesso, (false) descartar Bytes.
@@ -48,7 +46,7 @@ void loop() {
         Alerta(); 
         
         //DEBUG: Envia dados pela Serial para o computador.
-        //Envia_dados_serial();         
+        Envia_dados_serial();         
       //}
 
       //Zera contagem de octetos para nova recepção.  
