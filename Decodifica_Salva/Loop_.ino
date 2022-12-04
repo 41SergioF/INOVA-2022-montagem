@@ -32,10 +32,9 @@ void loop() {
     //Serial.print(" : ");
     //Serial.print(oux_byte,HEX);
     //Serial.println();
-    for (int i = 0; i < 8; i++){
-      Serial.print(octetos[i]);     
-    }
-    Serial.println();
+   
+    Serial.println(line);     
+    
     
     // Verificação de Bytes: (true) Bytes recebidos com sucesso, (false) descartar Bytes.
     // octetos[7] => último byte recebido.
