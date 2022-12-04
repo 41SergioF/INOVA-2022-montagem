@@ -16,7 +16,10 @@
 #define CS 13
 
 SSD1306  display(0x3c, 4, 15);
- 
+
+File file;
+char line[30];
+
 //OLED pins to ESP32 GPIOs via this connection:
 //OLED_SDA -- GPIO4
 //OLED_SCL -- GPIO15
