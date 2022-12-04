@@ -1,6 +1,3 @@
-/*#include <WiFi.h>
-#include <LoRa.h>
-*/
 #include <SPI.h>
 #include <SD.h>
 #include <SSD1306.h>
@@ -24,31 +21,6 @@ char line[30];
 //OLED_SDA -- GPIO4
 //OLED_SCL -- GPIO15
 //OLED_RST -- GPIO16
-// WIFI_LoRa_32 ports
-// GPIO5  -- SX1278's SCK
-// GPIO19 -- SX1278's MISO
-// GPIO27 -- SX1278's MOSI
-// GPIO18 -- SX1278's CS
-// GPIO14 -- SX1278's RESET
-// GPIO26 -- SX1278's IRQ(Interrupt Request)
-/* 
-#define SS      18
-#define RST     14
-#define DI0     26
-#define BAND    433E6*/
-
-//#define AP false  // Caso seja true, o esp32 funciona em modo acess point, em false, funciona como cliente wifi.
-/*
-const char *ssid_ap = "ESP32ap";
-const char *password_ap = "12345678";
-
-const char *ssid_client = "acesse ja lig 985191533 v"; //"Valter";
-const char *password_client = "sou1pessoaFELIZ";  //"12345678";
-*/
-// Initialize the Ethernet server library
-// with the IP address and port you want to use
-// (port 80 is default for HTTP):
-
 
 // Constantes que definem a quantidade de pulsos consumidos totais previstos para entrar na região amarela (atenção - consumo próximo à margem superior da meta).
 #define Pulso_total_previsto_ponta 1875 // Dentro do horário de ponta. 1875 pulsos equivale à kWh.
@@ -118,13 +90,7 @@ bool int_reativo = false; // Indicador de intervalo reativo.
 bool considera_capacitivo = false; // Indica se o reativo capacitivo é considerado no cálculo da conta.
 bool considera_indutivo = false; // Indica se o reativo indutivo é considerado no cálculo da conta.
 bool tarifa_reativo=0; // Ativada (1) ou desativada (0).
-/*
-// Set web server port number to 80
-WiFiServer server(80);
-WiFiClient client;
-// Variable to store the HTTP request
-String header;
-*/
+
 //Protótipos de funções.
 void Decodifica();
 void Envia_dados_serial();
