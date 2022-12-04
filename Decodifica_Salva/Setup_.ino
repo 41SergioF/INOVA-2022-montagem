@@ -17,8 +17,13 @@ void setup() {
   Serial.begin(115200);
   while (!Serial); //if just the the basic function, must connect to a computer
   delay(1000);
-
   Serial.println("Init Serial");
+
+  SPI.begin(CLK, MISO, MOSI, CS);
+  if (!SD.begin(13)) {
+    Serial.println("initialization failed!");
+    while (1);
+  }
 /*
   Serial.println("LoRa Receiver"); 
   display.drawString(5,5,"LoRa Receiver"); 

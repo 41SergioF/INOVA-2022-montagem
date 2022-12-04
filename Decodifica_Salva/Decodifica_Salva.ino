@@ -1,12 +1,19 @@
 /*#include <WiFi.h>
 #include <LoRa.h>
 */
+#include <SPI.h>
+#include <SD.h>
 #include <SSD1306.h>
 
 //#include <math.h>
 //#include <Wire.h>
 //#include <SPI.h>
 //#include <Arduino.h>
+
+#define MOSI 15
+#define MISO 2
+#define CLK 14
+#define CS 13
 
 SSD1306  display(0x3c, 4, 15);
  
