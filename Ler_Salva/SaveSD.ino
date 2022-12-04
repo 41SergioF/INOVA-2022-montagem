@@ -1,11 +1,15 @@
 void SaveSD(){
-  octetos_="";
-  for(int i=0;i<8;i++)
-    octetos_+=octetos[i];
+  String octeto="";
   
   file = SD.open("/octecos.txt", FILE_APPEND);
   Serial.print("Save ");
-  file.println(octetos_);
+  
+  for(int i=0;i<8;i++){
+      file.print(octetos[i]);
+      file.print(":");  
+  }
+  file.println();
+  
   file.close();  
   Serial.print(": save End\n");
 }
