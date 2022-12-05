@@ -1,5 +1,6 @@
 void loop() {
-  /*// Verifica se há bytes recebidos pela interface LoRa.
+  if (!all){
+    /*// Verifica se há bytes recebidos pela interface LoRa.
   int packetSize = LoRa.parsePacket();
      
   if (packetSize) {
@@ -30,7 +31,11 @@ void loop() {
     //Serial.print(" : ");
     //Serial.print(oux_byte,HEX);
     //Serial.println();   
-    
+
+    for (int i = 0; i < 8; i++){
+      Serial.print(octetos[i], HEX);
+    }
+    Serial.println();
     
     // Verificação de Bytes: (true) Bytes recebidos com sucesso, (false) descartar Bytes.
     // octetos[7] => último byte recebido.
@@ -46,7 +51,8 @@ void loop() {
         Alerta(); 
         
         //DEBUG: Envia dados pela Serial para o computador.
-        Envia_dados_serial();         
+        //Envia_dados_serial();
+        Envia_dados_arquivo();         
       //}
 
       //Zera contagem de octetos para nova recepção.  
@@ -62,5 +68,9 @@ void loop() {
       //Baixa a flag de recebimento OK.
       verificacao_ok=false;
   
-  cleanLine();
+      cleanLine();
+  }else{
+    Serial.println("End file");
+    delay(10000);
+  }
 }

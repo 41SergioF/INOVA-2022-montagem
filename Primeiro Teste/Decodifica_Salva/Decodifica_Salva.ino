@@ -91,8 +91,11 @@ bool considera_capacitivo = false; // Indica se o reativo capacitivo é consider
 bool considera_indutivo = false; // Indica se o reativo indutivo é considerado no cálculo da conta.
 bool tarifa_reativo=0; // Ativada (1) ou desativada (0).
 
+bool all = false;
+
 //Protótipos de funções.
 void Decodifica();
+void Envia_dados_arrquivo();
 void Envia_dados_serial();
 void Atualiza_valor();
 void Alerta();

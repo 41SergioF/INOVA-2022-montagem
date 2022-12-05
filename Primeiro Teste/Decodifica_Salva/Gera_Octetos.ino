@@ -1,4 +1,9 @@
 void Gera_Octetos(){
+
+  if(!file.available()){
+    all = true;
+  }
+  
   int i = 0;
   
   if(file){ //Gera a linha
