@@ -5,65 +5,56 @@ void Envia_dados_arquivo(){
     Serial.println("Falha ao abrir o arquivos de saída!");
     while(1);
   }
-
-    
-    out.print("[Resta ");
     out.print(tempo_restante);
-    out.print(" segundos :");
-    out.print(" ativos (ponta: ");
+    out.print(":");
     out.print(ativos_ponta_total);
-    out.print(", fora: ");
+    out.print(":");
     out.print(ativos_fora_ponta_total);
-    out.print(") reativos (ponta: ");
+    out.print(":");
     out.print(reativos_ponta_total);
-    out.print(", fora: ");
+    out.print(":");
     out.print(reativos_fora_ponta_total);
-    out.print(")]");
+    out.print(":");
 
 /*    
   //Reposição de demanda
   out.print(" Rep.: ");
-  out.print((reposicao?"Sim.":"Não."));
+  out.print((reposicao?"Sim:":"Não:"));
 */
   // Intervalo de reativos
-  out.print(" I. r: ");
-  out.print((int_reativo?"Sim.":"Não."));
+  out.print((int_reativo?"Sim:":"Não:"));
   
   // Considera reativos
-  out.print(" C. r: ");
-  out.print((considera_capacitivo?"Sim.":"Não."));  
+  out.print((considera_capacitivo?"Sim:":"Não:"));  
   
   // Considera indutivos
-  out.print(", i: ");
-  out.print((considera_indutivo?"Sim.":"Não.")); 
+  out.print((considera_indutivo?"Sim:":"Não:")); 
   
   // Tarifa reaivo
-  out.print(" T. r: ");
-  out.print((tarifa_reativo?"ativada.":"desativada."));  
-
-  out.print(" Tipo: ");
+  out.print((tarifa_reativo?"ativada:":"desativada:"));  
+  
   switch(tipo)
   {
-    case 0: out.println("azul.");
+    case 0: out.println("azul");
     break;
-    case 1: out.println("verde.");
+    case 1: out.println("verde");
     break;
-    case 2: out.println("irrigantes.");
+    case 2: out.println("irrigantes");
     break;
-    case 3: out.println("outras.");
+    case 3: out.println("outras");
     break;
-    default: out.println("Não identificada.");
+    default: out.println("Não identificada");
   }
 /*
   out.print(" Horário: ");
   switch(tarifa){
-    case 1: out.println("ponta.");
+    case 1: out.println("ponta:");
     break;
-    case 2: out.println("fora ponto.");
+    case 2: out.println("fora ponto:");
     break;
-    case 8: out.println("reservado.");
+    case 8: out.println("reservado:");
     break;
-    default:out.println("...");
+    default:out.println("..:");
   }
   */
   out.close();

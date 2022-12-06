@@ -67,6 +67,7 @@ unsigned int delta_reativos=0;  // Variação de reativos entre segundos consecu
 unsigned int segundos_horario=0; // Tempo em segundos desde o início do horário atual (ponta ou fora ponta).
 
 byte octetos[8]=""; //  Vetor de Bytes que acondiciona os dados recebidos da SSU.
+byte octetos_aux[8]="";
 byte oux_byte=0;  // Ou exclusivo de todos os dados recebidos pela SSU até o momento. Ao final, deve-se realizar a inversão desta variável para a comparação com o Byte de verificação.
 
 bool verificacao_ok=false;  // Flag que indica verificação de dados vindos da SSU está ok.

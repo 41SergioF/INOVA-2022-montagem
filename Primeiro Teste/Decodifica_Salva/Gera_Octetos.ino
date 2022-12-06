@@ -24,7 +24,7 @@ void Gera_Octetos(){
   
   char * octeto = strtok(line, ":"); //Extrai o octeto
   while(octeto != NULL){
-    octetos[i] = (byte)String(octeto).toInt();
+    octetos_aux[i] = (byte)String(octeto).toInt();
     //Serial.println(octeto);
     octeto = strtok(NULL, ":");
     i++;

@@ -30,5 +30,12 @@ void setup() {
     return;
   }
   delay(500);
-  
+
+  if (SD.exists("/octetosOut.csv")){
+    SD.remove("/octetosOut.csv");
+  }
+  if (!SD.exists("/octetosOut.csv")){
+    Serial.println("Arquivo apagado com sucesso!");
+  }
+  delay(2000);
 }

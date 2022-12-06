@@ -1,27 +1,24 @@
 void loop() {
   if (!all){
-    /*// Verifica se há bytes recebidos pela interface LoRa.
-  int packetSize = LoRa.parsePacket();
-     
-  if (packetSize) {
-    // read packet
+    Gera_Octetos();
+    
     data_="";
     oux_byte=0;
-    for (int i=0;LoRa.available();i++){
+    
+    for (int i=0; i < 8; i++){
       if(i>7){
         i=0;
         data_="";
         oux_byte=0;
       }
-      octetos[i] = LoRa.read();
+      octetos[i] = octetos_aux[i];
       
       if(i<7)
         oux_byte^=octetos[i];
         
       data_+=(String)octetos[i];
     }
-    */
-    Gera_Octetos();
+    
     
     // Inverte o byte de verificação.
     oux_byte=~oux_byte;
@@ -32,10 +29,12 @@ void loop() {
     //Serial.print(oux_byte,HEX);
     //Serial.println();   
 
+    /*
     for (int i = 0; i < 8; i++){
       Serial.print(octetos[i], HEX);
     }
     Serial.println();
+    */
     
     // Verificação de Bytes: (true) Bytes recebidos com sucesso, (false) descartar Bytes.
     // octetos[7] => último byte recebido.
