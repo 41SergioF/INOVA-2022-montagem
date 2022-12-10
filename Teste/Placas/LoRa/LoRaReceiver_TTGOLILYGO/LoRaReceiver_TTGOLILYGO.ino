@@ -10,7 +10,8 @@ void setup() {
   while (!Serial);
 
   Serial.println("LoRa Receiver");
-
+  
+  // SPI.begin(SCK,MISO,MOSI,CS);
   SPI.begin(5,19,27,18);
   LoRa.setPins(SS,RST,DI0);
   if (!LoRa.begin(433E6)) {
