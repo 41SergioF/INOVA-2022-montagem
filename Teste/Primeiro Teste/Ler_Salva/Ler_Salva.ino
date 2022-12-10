@@ -74,6 +74,7 @@ void setup() {
   display.drawString(5,5,"LoRa Sender");
   display.display();
   */
+  /*
   SPI.begin(5,19,27,18);
   LoRa.setPins(SS,RST,DI0);
   Serial.println("LoRa Sender");
@@ -85,14 +86,17 @@ void setup() {
   //display.drawString(5,20,"LoRa Initializing OK!");
   //display.display();
 
-  //inicia porta cartao sd
   SPI.end();
+  */
+  //inicia porta cartao sd
+
   SPI.begin(CLK, MISO, MOSI, CS);
   while(!SD.begin(13)) {
     delay(1000);
   }
   Serial.println("Init SD");
   delay(2000);
+  SPI.end()
 }
 
 void envia_lora(){
@@ -137,7 +141,7 @@ void loop() {
       
       if(verificacao_ok)
       {
-        envia_lora();
+        //envia_lora();
         SaveSD();
       }
       delay(1000);
