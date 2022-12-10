@@ -12,7 +12,7 @@ int counter = 0;
 // GPIO26 -- SX1278's IRQ(Interrupt Request)
 
 #define SS      18
-#define RST     12
+#define RST     14
 #define DI0     26
 
 void setup() {
@@ -21,6 +21,7 @@ void setup() {
 
   Serial.println("LoRa Sender");
 
+  // SPI.begin(SCK,MISO,MOSI,CS);
   SPI.begin(5,19,27,18);
   LoRa.setPins(SS,RST,DI0);
   if (!LoRa.begin(433E6)) {
