@@ -136,6 +136,7 @@ void envia_lora(){
   for(int i=0;i<8;i++)
     octetos_+=octetos[i];
   
+  // FOR DEBUG
   // Serial.print(counter);
   // Serial.print(": ");
   // Serial.print(octetos_);
