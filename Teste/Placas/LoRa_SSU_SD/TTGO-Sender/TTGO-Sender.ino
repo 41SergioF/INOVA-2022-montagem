@@ -157,9 +157,9 @@ void envia_lora(){
   LoRa.print(octetos_);
   //LoRa.write(octetos,8);
   LoRa.endPacket();
-  counter++;
-
+  
   SPI.end();
+  counter++;
 }
 
 void loop() {
@@ -179,69 +179,17 @@ void loop() {
       if(verificacao_ok)
       {
         envia_lora();
-        // Formação da string.
-        // octetos_="";
-        // for(int i=0;i<8;i++){
-        //   octetos_+=octetos[i];
-        //   octetos_+=":";
-        }
-
-        /* DEBUG na serial */
-        /*
-        dateNow();
-        Serial.print(counter);
-        Serial.print(": ");
-        //for(int i=0;i<8;i++)
-        //  Serial.write(octetos[i]);
-        Serial.print(octetos_);
-        Serial.println();
-        */
-        /*
-        display.clear();
-        display.setFont(ArialMT_Plain_16);  
-        display.drawString(12, 5, octetos_);
-        display.drawString(50, 30, String(counter));
-        display.display();
-        */
-        SPI.begin(5,19,27,18); //Abrindo serial LoRa
-        // send packet
-        LoRa.beginPacket();
-          LoRa.print(timestemp);
-          LoRa.print(";");
-          LoRa.print(octetos_);
-          //LoRa.write(octetos,8);
-        LoRa.endPacket();
-        counter++;
-
-        //DEBUG 
-        Serial.print(timestemp);
-        Serial.print(";");
-        Serial.println(octetos_);
-        //Serial.println("Pacote enviado!");
-        
-        SPI.end();
-  
-        SPI.begin(CLK, MISO, MOSI, CS);
         SaveSD();
-        SPI.end();
       }
       delay(1000);
 
-      //Zera contagem de octetos para nova recepção.  
-      indice_octeto=0;
-      
-      //Limpa o Byte de verificação.
-      oux_byte=0;
-
-        // Limpa o buffer de recepção.
-      for(int i=0;i<8;i++)
+       
+      indice_octeto=0;     //Zera contagem de octetos para nova recepção. 
+      oux_byte=0;          //Limpa o Byte de verificação.
+      for(int i=0;i<8;i++) // Limpa o buffer de recepção.
         octetos[i]=0;
-    
-      //Baixa a flag de recebimento OK.
-      verificacao_ok=false;
-      
-      // Flag que indica fim de atividade de recebimento de dados.
-      ocioso=true;
+      verificacao_ok=false;//Baixa a flag de recebimento OK.
+      ocioso=true;         // Flag que indica fim de atividade de recebimento de dados.
     }
   
   if(SSU.available())

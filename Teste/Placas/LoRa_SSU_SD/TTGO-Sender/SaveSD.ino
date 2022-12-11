@@ -1,4 +1,5 @@
 void SaveSD(){
+  SPI.begin(CLK, MISO, MOSI, CS);
   String octeto="";
   
   file = SD.open("/octetos.csv", FILE_APPEND);
@@ -15,4 +16,5 @@ void SaveSD(){
   
   file.close();  
   Serial.print("Save!\n");
+  SPI.end();
 }
