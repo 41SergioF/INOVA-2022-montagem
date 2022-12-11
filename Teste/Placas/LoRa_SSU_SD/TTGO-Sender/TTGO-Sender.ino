@@ -5,7 +5,7 @@
 #include <SSD1306.h>
 #include <Arduino.h>
 #include <HardwareSerial.h>
-#include "RTCDS1307.h"
+ #include "RTCDS1307.h"
 
 byte octetos[9]="12345678"; //  Vetor de Bytes que acondiciona os dados recebidos da SSU.
 byte oux_byte=0;  // Ou exclusivo de todos os dados recebidos pela SSU até o momento. Ao final, deve-se realizar a inversão desta variável para a comparação com o Byte de verificação.
@@ -54,12 +54,21 @@ File file;
 
 RTCDS1307 rtc(0x68);
 
+//pinagem lora
+#define LORA_SCK     5
+#define LORA_MISO    19
+#define LORA_MOSI    27
+#define LORA_CS      18
+#define LORA_RST     14
+#define LORA_DI00    26
+
+
 //RTC
 uint8_t year, month, weekday, day, hour, minute, second;
 bool period = 0;
 
 String timestemp = "";
-
+void SaveSD();
 void dateNow();
 
 void setup() {
@@ -73,7 +82,6 @@ void setup() {
   while (!SSU);
   
   Serial.begin(115200);
-  while (!Serial); //If just the the basic function, must connect to a computer
   
   // Initialising the UI will init the display too.
   //SPI.begin(5,19,27,18);
@@ -108,9 +116,18 @@ void setup() {
   
   Serial.begin(115200);
   rtc.begin();
-  rtc.setDate(22, 12, 7);
-  rtc.setTime(19, 5, 00);
-    
+  // rtc.setDate(22, 12, 7);
+  // rtc.setTime(19, 5, 00);
+
+  LoRa.setPins(LORA_CS,LORA_RST,LORA_DI00);
+
+    Serial.println("LoRa Sender");
+  if (!LoRa.begin(BAND)) {
+    Serial.println("Starting LoRa failed!");
+    while (1);
+  }
+
+  Serial.println("LoRa Initial OK!");  
   SD.remove("/octetos.csv");
   if(SD.exists("/octetos.csv")){
     Serial.println("Falha em apagar o arquivo!");
@@ -119,27 +136,54 @@ void setup() {
   SPI.end();
 }
 
+void envia_lora(){
+
+  SPI.begin(LORA_SCK,LORA_MISO,LORA_MOSI,LORA_CS);
+  
+  // Formação da string.
+  octetos_="";
+  for(int i=0;i<8;i++)
+    octetos_+=octetos[i];
+  
+  // Serial.print(counter);
+  // Serial.print(": ");
+  // Serial.print(octetos_);
+  // Serial.println();
+
+  // send packet
+  LoRa.beginPacket();
+  LoRa.print(timestemp);
+  LoRa.print(";");
+  LoRa.print(octetos_);
+  //LoRa.write(octetos,8);
+  LoRa.endPacket();
+  counter++;
+
+  SPI.end();
+}
+
 void loop() {
     // DEBUG dateNow();
     //Timeout: tempo entre dados da SSU excedeu o tempo limite de 50ms. Fim de transmissão SSU.
     //TIMEOUT Observado: 290.0 ms
     //Tempo entre caracteres: 12.0 ms
-    if((unsigned int)millis()-tempo>50.0 && !ocioso)
-    //if(true)
+    //if((unsigned int)millis()-tempo>50.0 && !ocioso)
+    if(true)
     {  
       // Verificação de Bytes: (true) Bytes recebidos com sucesso, (false) descartar Bytes.
       // octetos[7] => último byte recebido.
       // oux_byte => ou exclusivo de todos os bytes recebidos até agora. Tem-se que inverter bit-a-bit o valor de oux_byte antes da verificação.
-      verificacao_ok=((octetos[7]==((byte)~oux_byte))?true:false);
-      //verificacao_ok=true;
+      //verificacao_ok=((octetos[7]==((byte)~oux_byte))?true:false);
+      verificacao_ok=true;
       
       if(verificacao_ok)
       {
+        envia_lora();
         // Formação da string.
-        octetos_="";
-        for(int i=0;i<8;i++){
-          octetos_+=octetos[i];
-          octetos_+=":";
+        // octetos_="";
+        // for(int i=0;i<8;i++){
+        //   octetos_+=octetos[i];
+        //   octetos_+=":";
         }
 
         /* DEBUG na serial */
