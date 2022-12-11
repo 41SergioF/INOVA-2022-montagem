@@ -1,35 +1,3 @@
-#include <Wire.h>
-#include <SPI.h>
-#include <LoRa.h>
-#include <SD.h>
-#include <SSD1306.h>
-#include <Arduino.h>
-#include <HardwareSerial.h>
- #include "RTCDS1307.h"
-
-byte octetos[9]="12345678"; //  Vetor de Bytes que acondiciona os dados recebidos da SSU.
-byte oux_byte=0;  // Ou exclusivo de todos os dados recebidos pela SSU até o momento. Ao final, deve-se realizar a inversão desta variável para a comparação com o Byte de verificação.
-
-String octetos_=" ";
-
-bool verificacao_ok=false;  // Flag que indica verificação de dados vindos da SSU está ok.
-bool ocioso=true;   // Flag que sinaliza a não recepção de dados da SSU.
-
-unsigned int tempo=0;  // tempo contato entre dados recebidos da SSU a fim de verificar o timeout. ACREDITO NÃO PRECISAR SER LONG. ANALISAR FUTURAMENTE.
-unsigned int indice_octeto=0; // Índice que aponta para próxima região livre do vetor de octetos.
-
-int counter = 0;
-
-HardwareSerial SSU(1);
-
-File file;
-
-
-#define MOSI 15
-#define MISO 2
-#define CLK 14
-#define CS 13
-//Alterado Carlos 22/11/22 
 
 //OLED pins to ESP32 GPIOs via this connecthin:
 //OLED_SDA -- GPIO4
@@ -46,15 +14,28 @@ File file;
 // GPIO18 -- SX1278's CS
 // GPIO14 -- SX1278's RESET
 // GPIO26 -- SX1278's IRQ(Interrupt Request)
+
+#include <Wire.h>
+#include <SPI.h>
+#include <LoRa.h>
+#include <SD.h>
+#include <SSD1306.h>
+#include <Arduino.h>
+#include <HardwareSerial.h>
+#include "RTCDS1307.h"
+ 
+//Alterado Carlos 22/11/22 
+#define MOSI 15
+#define MISO 2
+#define CLK 14
+#define CS 13
  
 #define SS      18
 #define RST     12
 #define DI0     26
 #define BAND    433E6  //915E6 
 
-RTCDS1307 rtc(0x68);
-
-//pinagem lora
+//Linagem lora
 #define LORA_SCK     5
 #define LORA_MISO    19
 #define LORA_MOSI    27
@@ -62,12 +43,31 @@ RTCDS1307 rtc(0x68);
 #define LORA_RST     14
 #define LORA_DI00    26
 
+byte octetos[9]="12345678"; //  Vetor de Bytes que acondiciona os dados recebidos da SSU.
+byte oux_byte=0;  // Ou exclusivo de todos os dados recebidos pela SSU até o momento. Ao final, deve-se realizar a inversão desta variável para a comparação com o Byte de verificação.
+
+String octetos_=" ";
+
+bool verificacao_ok=false;  // Flag que indica verificação de dados vindos da SSU está ok.
+bool ocioso=true;   // Flag que sinaliza a não recepção de dados da SSU.
+
+unsigned int tempo=0;  // tempo contato entre dados recebidos da SSU a fim de verificar o timeout. ACREDITO NÃO PRECISAR SER LONG. ANALISAR FUTURAMENTE.
+unsigned int indice_octeto=0; // Índice que aponta para próxima região livre do vetor de octetos.
+
+int counter = 0;
+
+HardwareSerial SSU(1);
+
+RTCDS1307 rtc(0x68);
+
+File file;
 
 //RTC
 uint8_t year, month, weekday, day, hour, minute, second;
 bool period = 0;
 
 String timestemp = "";
+
 void SaveSD();
 void dateNow();
 
@@ -82,10 +82,10 @@ void setup() {
   while (!SSU);
   
   Serial.begin(115200);
-  
+
+  /*
   // Initialising the UI will init the display too.
   //SPI.begin(5,19,27,18);
-  /*
   display.init();
   display.flipScreenVertically();
   display.setFont(ArialMT_Plain_10);
@@ -93,7 +93,8 @@ void setup() {
   display.drawString(5,5,"LoRa Sender");
   display.display();
   */
-  SPI.begin(5,19,27,18);
+  
+  LoRa.setPins(LORA_CS,LORA_RST,LORA_DI00);
   LoRa.setPins(SS,RST,DI0);
   Serial.println("LoRa Sender");
   if (!LoRa.begin(433E6)) {
@@ -103,31 +104,21 @@ void setup() {
   Serial.println("LoRa Initial OK!");
   //display.drawString(5,20,"LoRa Initializing OK!");
   //display.display();
-
-  //inicia porta cartao sd
   SPI.end();
+
+  // Valores do RTC
+  // rtc.begin();
+  // rtc.setDate(22, 12, 7);
+  // rtc.setTime(19, 5, 00);
   
+  //inicia porta cartao sd
   SPI.begin(CLK, MISO, MOSI, CS);
   while(!SD.begin(13)) {
     delay(1000);
   }
-  Serial.println("Init SD");
-  delay(2000);
+  Serial.println("Init SD!");
+  delay(1000);
   
-  Serial.begin(115200);
-  rtc.begin();
-  // rtc.setDate(22, 12, 7);
-  // rtc.setTime(19, 5, 00);
-
-  LoRa.setPins(LORA_CS,LORA_RST,LORA_DI00);
-
-    Serial.println("LoRa Sender");
-  if (!LoRa.begin(BAND)) {
-    Serial.println("Starting LoRa failed!");
-    while (1);
-  }
-
-  Serial.println("LoRa Initial OK!");  
   SD.remove("/octetos.csv");
   if(SD.exists("/octetos.csv")){
     Serial.println("Falha em apagar o arquivo!");
@@ -159,6 +150,7 @@ void envia_lora(){
   LoRa.endPacket();
   
   SPI.end();
+  
   counter++;
 }
 
@@ -178,18 +170,33 @@ void loop() {
       
       if(verificacao_ok)
       {
+        /*
+        display.clear();
+        display.setFont(ArialMT_Plain_16);  
+        display.drawString(12, 5, octetos_);
+        display.drawString(50, 30, String(counter));
+        display.display();
+        */
         envia_lora();
         SaveSD();
       }
       delay(1000);
 
-       
-      indice_octeto=0;     //Zera contagem de octetos para nova recepção. 
-      oux_byte=0;          //Limpa o Byte de verificação.
-      for(int i=0;i<8;i++) // Limpa o buffer de recepção.
+      //Zera contagem de octetos para nova recepção.  
+      indice_octeto=0;
+      
+      //Limpa o Byte de verificação.
+      oux_byte=0;
+
+        // Limpa o buffer de recepção.
+      for(int i=0;i<8;i++)
         octetos[i]=0;
-      verificacao_ok=false;//Baixa a flag de recebimento OK.
-      ocioso=true;         // Flag que indica fim de atividade de recebimento de dados.
+    
+      //Baixa a flag de recebimento OK.
+      verificacao_ok=false;
+      
+      // Flag que indica fim de atividade de recebimento de dados.
+      ocioso=true;
     }
   
   if(SSU.available())
@@ -216,8 +223,7 @@ void loop() {
      
       // Reinicia a contagem de tempo para avaliação do Timeout.
       tempo=millis();
-
-      dateNow(); // Quando finalizar a leitura
     }
+    dateNow(); // Quando finalizar a leitura
   } 
 }
